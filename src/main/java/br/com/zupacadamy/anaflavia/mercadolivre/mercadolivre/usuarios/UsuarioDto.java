@@ -5,11 +5,14 @@ import javax.validation.constraints.NotBlank;
 
 import org.hibernate.validator.constraints.Length;
 
+import br.com.zupacadamy.anaflavia.mercadolivre.mercadolivre.usuarios.validacoes.UniqueValue;
+
 
 public class UsuarioDto {
 	
 	@NotBlank
     @Email
+    @UniqueValue(domainClass = CadastroUsuario.class, fieldName= "login")
     private String login;
 
     @NotBlank
@@ -38,5 +41,7 @@ public class UsuarioDto {
 		 CadastroUsuario cadastroUsuario = new CadastroUsuario(this.login, this.senha);
 		 return cadastroUsuario;
 	}
+
+	
 
 }
