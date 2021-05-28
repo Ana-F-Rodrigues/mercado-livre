@@ -25,18 +25,13 @@ public class ProdutoController {
 
 	@Autowired
 	private CategoriaRepository categoriaRepository;
-	
-	@Autowired
-	private EntityManager manager;
 
 	@PostMapping
-	@Transactional
 	public ResponseEntity cadastrar(@RequestBody @Valid ProdutoDto produtoDto, UriComponentsBuilder uriBuilder) {
-		System.out.println(produtoDto.getCaracteristicas().get(0).toString()); 
 		Produto produto = produtoDto.converter(categoriaRepository);
 		if (produto != null) {
-		  //produtoRepository.save(produto);
-			manager.persist(produto);
+			produtoRepository.save(produto);
+
 			return ResponseEntity.ok().build();
 		}
 		return ResponseEntity.notFound().build();

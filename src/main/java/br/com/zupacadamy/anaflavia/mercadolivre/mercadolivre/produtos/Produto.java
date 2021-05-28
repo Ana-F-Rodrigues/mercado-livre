@@ -40,39 +40,18 @@ public class Produto {
 	}
 
 	public Produto(@NotBlank String nome, BigDecimal preco, Integer quantidade, String descricao,
-			List<DetalheProdutoDto> caracteristicasProduto, Categoria categoria){
+			List<DetalheProdutoDto> caracteristicasProduto, Categoria categoria) {
 		super();
 		this.nome = nome;
 		this.preco = preco;
 		this.quantidade = quantidade;
 		this.descricao = descricao;
-		this.caracteristicasProduto = caracteristicasProduto.stream().map(detalhesProdutoDto ->  detalhesProdutoDto.converter(this)
-				).collect(Collectors.toList());
-			
+		this.caracteristicasProduto = caracteristicasProduto.stream()
+				.map(detalhesProdutoDto -> detalhesProdutoDto.converter(this)).collect(Collectors.toList());
+
 		this.categoria = categoria;
 		this.instanteCadastro = LocalDateTime.now();
-		
-		
-	}
-	
-	
-	
 
-//	public Produto(String nome, BigDecimal preco, Integer quantidade, String descricao,
-//			List<DetalheProdutoDto> caracteristicasProduto, Categoria categoria) {
-//		this.nome = nome;
-//		this.preco = preco;
-//		this.quantidade = quantidade;
-//		this.descricao = descricao;
-//
-//		this.caracteristicasProduto = caracteristicasProduto.stream().map(
-//				detalhesProdutoDto ->  detalhesProdutoDto.converter(this)
-//				).collect(Collectors.toList());
-//		this.categoria = categoria;
-//		this.instanteCadastro = LocalDateTime.now();
-//
-//	
-//		Assert.isTrue((this.preco.compareTo(BigDecimal.ZERO)) == 1, "O preço precisa ser maior que R$ 0,00");
-//		Assert.isTrue(this.quantidade >= 0, "A quantidade de itens disponíveis precisa ser maior ou igual a zero");
-//	}
+	}
+
 }

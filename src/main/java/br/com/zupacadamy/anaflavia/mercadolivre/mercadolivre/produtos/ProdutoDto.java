@@ -15,6 +15,7 @@ import org.hibernate.validator.constraints.Length;
 
 import br.com.zupacadamy.anaflavia.mercadolivre.mercadolivre.categorias.Categoria;
 import br.com.zupacadamy.anaflavia.mercadolivre.mercadolivre.categorias.CategoriaRepository;
+import br.com.zupacadamy.anaflavia.mercadolivre.mercadolivre.compartilhado.ExisteId;
 
 public class ProdutoDto {
 
@@ -32,46 +33,29 @@ public class ProdutoDto {
 	@Length(max = 1000)
 	private String descricao;
 
-	//@Size(min = 3)
-	private List<DetalheProdutoDto> detalheProdutoDto = new ArrayList<>(); 
-																												// produto
-																												// pode
-																												// ter
-																												// várias
-																												// características
-
-	@NotNull
-	//@ExistsId(domainClass = Categoria.class, fieldName = "id")
-	private Long idCategoria;
-
-	public ProdutoDto() {
-	}
-
-	public List<DetalheProdutoDto> getCaracteristicas() {
-		return detalheProdutoDto ;
-	}
-
-	public void setCaracteristicas(List<DetalheProdutoDto> caracteristicas) {
-		this.detalheProdutoDto = caracteristicas;
-	}
-
-	public ProdutoDto(String nome, BigDecimal preco, Integer quantidade, String descricao,
-			List<DetalheProdutoDto> detalheProdutoDto, Long idCategoria) {
+	public ProdutoDto(@NotBlank String nome, @NotNull @Positive BigDecimal preco,
+			@NotNull @PositiveOrZero Integer quantidade, @NotBlank @Length(max = 1000) String descricao,
+			List<DetalheProdutoDto> caracteristicas, @NotNull Long idCategoria) {
 		this.nome = nome;
 		this.preco = preco;
 		this.quantidade = quantidade;
 		this.descricao = descricao;
-		this.detalheProdutoDto = detalheProdutoDto;
+		this.caracteristicas = caracteristicas;
 		this.idCategoria = idCategoria;
 	}
 
+	 @Size(min = 3)
+	private List<DetalheProdutoDto> caracteristicas = new ArrayList<>();
+
+	@NotNull
+    @ExisteId(domainClass = Categoria.class, fieldName = "id")
+	private Long idCategoria;
+
 	public Produto converter(CategoriaRepository categoriaRepository) {
 		Optional<Categoria> categoriaOp = categoriaRepository.findById(this.idCategoria);
-																						
 
 		if (categoriaOp.isPresent()) {
-			return new Produto(nome, preco, quantidade, descricao, detalheProdutoDto,
-					categoriaOp.get());
+			return new Produto(nome, preco, quantidade, descricao, caracteristicas, categoriaOp.get());
 		}
 
 		return null;
@@ -110,28 +94,12 @@ public class ProdutoDto {
 		this.descricao = descricao;
 	}
 
-	public List<DetalheProdutoDto> getCaracteristicasProdutoDTORequestList() {
-		return detalheProdutoDto;
-	}
-
-	public void setCaracteristicasProdutoDTORequestList(
-			List<DetalheProdutoDto> detalheProdutoDto) {
-		this.detalheProdutoDto = detalheProdutoDto;
-	}
-
 	public Long getIdCategoria() {
 		return idCategoria;
 	}
 
 	public void setIdCategoria(Long idCategoria) {
 		this.idCategoria = idCategoria;
-	}
-
-	@Override
-	public String toString() {
-		return "ProdutoDTORequest{" + "nome='" + nome + '\'' + ", preco=" + preco + ", quantidade=" + quantidade
-				+ ", descricao='" + descricao + '\'' + ", caracteristicasProdutoDTORequestList="
-				+ detalheProdutoDto + ", idCategoria=" + idCategoria + '}';
 	}
 
 }
